@@ -87,7 +87,8 @@
         cidr: "{{prisub3cidr}}"
         state: present
         tags:
-          Name: prisub3_out
+          Name: vprofile-prisubnet3
+      register: prisub3_out
 
     - name: creating the internet gateway
       ec2_vpc_igw:
