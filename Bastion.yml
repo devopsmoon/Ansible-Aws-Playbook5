@@ -1,0 +1,61 @@
+- name: playbook for creating the bastion host
+  hosts: localhost
+  become: true
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: importing the variables
+      include_vars: vars/Bastion_setup
+
+    - name: creating the key pair for aws
+      ec2_key:
+        name: vprofile-key
+        region: "{{region}}"
+        state: present
+      register: key_out
+
+    - debug:
+        var: key_out
+
+    - name: saving the private key for bastion host
+      copy:
+        content: "{{key_out.key.private_key}}"
+        dest: "./loginkey.pem"
+        mode: 0600
+      when: key_out.changed
+
+    - name: creating the security group of bastion host
+      ec2_group:
+        name: bastion host security group
+        description: allowing the port 22 from any where
+        region: "{{region}}"
+        state: present
+        rules:
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: "{{MYIP}}"
+      register: bastionsg_out
+
+    - name: creating the instance for bastion
+      ec2:
+        key_name: vprofile-key
+        region: "{{region}}"
+        state: present
+        instance_type: t2.micro
+        image: "{{bastion_ami}}"
+        wait: yes
+        wait_timeout: 300
+        instance_tags:
+          Name: "Bastion-host"
+          project: vprofile
+          owner: Devopsteam
+        exact_count: 1
+        count_tag:
+          Name: "Bastion-host"
+          project: vprofile
+          owner: Devopsteam
+        group_id: "{{bastiongw_out.group_id}}"
+        vpc_subnet_id: "pubsub1_out.subnet.id}}"
+      register: bastionhost_out
+
