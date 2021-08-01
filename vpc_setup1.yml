@@ -155,3 +155,22 @@
         - natgw_out.nat_gateway_id
         - prirt_out.route_table.id
 
+    - set_fact:
+        vpcid: "{{vpcout.vpc.id}}"
+        pubsub1id: "{{pubsub1_out.subnet.id}}"
+        pubsub2id: "{{pubsub2_out.subnet.id}}"
+        pubsub3id: "{{pubsub3_out.subnet.id}}"
+        prisub1id: "{{prisub1_out.subneet.id}}"
+        prisub2id: "{{prisub2_out.subnet.id}}"
+        prisub3id: "{{prisub3_out.subnet.id}}"
+        igwid: "{{igw_out.gateway_id}}"
+        pubrtid: "{{pubrt_out.route_table.id}}"
+        natgwid: "{{natgw_out.nat_gateway_id}}"
+        prirtid: "{{prirt_out.route_table.id}}}"
+        cacheable: yes
+
+    - name:
+      copy:
+        content: "vpcid: {{vpcout.vpc.id}}\npubsub1id: {{pubsub1_out.subnet.id}}\npubsub2id: {{pubsub2_out.subnet.id}}\npubsub3id: {{pubsub3_out.subnet.id}}\nprisub1id: {{prisub1_out.subneet.id}}\nprisub2id: {{prisub2_out.subnet.id}}\nprisub3id: {{prisub3_out.subnet.id}}\nigwid: {{igw_out.gateway_id}}\npubrtid: {{pubrt_out.route_table.id}}\nnatgwid: {{natgw_out.nat_gateway_id}}\nprirtid: {{prirt_out.route_table.id}}"
+        dest: vars/out_put.var
+
