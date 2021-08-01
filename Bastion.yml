@@ -41,6 +41,7 @@
       ec2:
         key_name: vprofile-key
         region: "{{region}}"
+        state: present
         instance_type: t2.micro
         image: "{{bastion_ami}}"
         wait: yes
@@ -55,6 +56,6 @@
           project: vprofile
           owner: Devopsteam
         group_id: "{{bastionsg_out.group_id}}"
-        vpc_subnet_id: "pubsub1_out.subnet.id}}"
+        vpc_subnet_id: "{{pubsub1_out.subnet.id}}"
       register: bastionhost_out
 
